@@ -51,13 +51,15 @@ public class CustomerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View ConvertView, ViewGroup viewGroup) {
-        View view = layoutInflater.inflate(R.layout.list_item_customer_2,viewGroup,false);
-        TextView firstName = (TextView) view.findViewById(R.id.list_item_customer_2_firstName);
-        TextView lastName = (TextView) view.findViewById(R.id.list_item_customer_2_lastName);
+        if(ConvertView == null) {
+            ConvertView = layoutInflater.inflate(R.layout.list_item_customer_2, viewGroup, false);
+        }
+        TextView firstName = (TextView) ConvertView.findViewById(R.id.list_item_customer_2_firstName);
+        TextView lastName  = (TextView) ConvertView.findViewById(R.id.list_item_customer_2_lastName);
 
         Customer customer = getItem(position);
         firstName.setText(customer.getFirstName());
         lastName.setText(customer.getLastName());
-        return view;
+        return ConvertView;
     }
 }
