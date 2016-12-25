@@ -8,15 +8,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> customers;
+    private ArrayAdapter<Customer> adapter;
+    private ArrayList<Customer> customers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,15 +37,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         customers = new ArrayList<>();
-        customers.add("Customer 1 < -");
-        customers.add("Customer 2 < -");
-        customers.add("Customer 3 < -");
-        customers.add("Customer 4 < -");
+        customers.add(new Customer("Customer 1" , "LastName 1"));
+        customers.add(new Customer("Customer 2" , "LastName 2"));
+        customers.add(new Customer("Customer 3" , "LastName 3"));
+
 
         ListView listView = (ListView)findViewById(R.id.activity_main_listView);
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,customers);
+        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,customers);
         listView.setAdapter(adapter);
-//        adapter.addAll("Customer 1 ","Customer 2","Customer 3");
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Customer customer = adapter.getItem(i);
+                Toast.makeText(MainActivity.this,customer.getFirstName(),Toast.LENGTH_SHORT).show();
+//                adapter.remove(customer);
+            }
+        });
     }
 
     @Override
@@ -64,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }else if (id == R.id.menu_main_addItem){
-            customers.add("Added Customer");
+            customers.add(new Customer("Added" , " Customer"));
             // After data changes , U must notify list adapter
             adapter.notifyDataSetChanged();
             return true;
