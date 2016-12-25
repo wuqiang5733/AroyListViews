@@ -24,12 +24,12 @@ public class CustomerListAdapter extends BaseAdapter {
         customers = new ArrayList<>();
     }
 
-    public void add(Customer customer){
+    public void add(Customer customer) {
         customers.add(customer);
         notifyDataSetChanged();
     }
 
-    public void remove(Customer customer){
+    public void remove(Customer customer) {
         customers.remove(customer);
         notifyDataSetChanged();
     }
@@ -51,15 +51,27 @@ public class CustomerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View ConvertView, ViewGroup viewGroup) {
-        if(ConvertView == null) {
+
+        CustomerViewHolder viewHolder;
+
+        if (ConvertView == null) {
             ConvertView = layoutInflater.inflate(R.layout.list_item_customer_2, viewGroup, false);
+            viewHolder = new CustomerViewHolder();
+            viewHolder.FirstName = (TextView) ConvertView.findViewById(R.id.list_item_customer_2_firstName);
+            viewHolder.LastName = (TextView) ConvertView.findViewById(R.id.list_item_customer_2_lastName);
+            ConvertView.setTag(viewHolder);
+        } else {
+            viewHolder = (CustomerViewHolder) ConvertView.getTag();
         }
-        TextView firstName = (TextView) ConvertView.findViewById(R.id.list_item_customer_2_firstName);
-        TextView lastName  = (TextView) ConvertView.findViewById(R.id.list_item_customer_2_lastName);
 
         Customer customer = getItem(position);
-        firstName.setText(customer.getFirstName());
-        lastName.setText(customer.getLastName());
+        viewHolder.FirstName.setText(customer.getFirstName());
+        viewHolder.LastName.setText(customer.getLastName());
         return ConvertView;
+    }
+
+    private class CustomerViewHolder {
+        public TextView FirstName;
+        public TextView LastName;
     }
 }
