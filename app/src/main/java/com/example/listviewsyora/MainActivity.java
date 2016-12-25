@@ -8,13 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
+
+    private CustomerListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +32,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<HashMap<String,String>> data = new ArrayList<>();
-        data.add(new Customer("Customer 1","LastName 1").toHashMap());
-        data.add(new Customer("Customer 2","LastName 2").toHashMap());
-        data.add(new Customer("Customer 3","LastName 3").toHashMap());
-
-        String[] hashMapProperities = {"FirstName",                       "LastName"};
-        int[] textViewIds =           {R.id.list_item_customer_2_firstName,R.id.list_item_customer_2_lastName};
-
-        SimpleAdapter adapter = new SimpleAdapter(this,data,R.layout.list_item_customer_2,hashMapProperities,textViewIds);
 
         ListView listView = (ListView)findViewById(R.id.activity_main_listView);
+
+        adapter = new CustomerListAdapter(this);
+        adapter.add(new Customer("Customer 1","Last Name 1"));
+        adapter.add(new Customer("Customer 2","Last Name 2"));
+        adapter.add(new Customer("Customer 3","Last Name 3"));
+        adapter.add(new Customer("Customer 4","Last Name 4"));
+        adapter.add(new Customer("Customer 5","Last Name 5"));
+
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                adapter.remove(adapter.getItem(i));
+            }
+        });
+
 
     }
 
@@ -63,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }else if (id == R.id.menu_main_addItem){
-//            customers.add(new Customer("Added" , " Customer"));
-//            // After data changes , U must notify list adapter
+        if (id == R.id.action_settings) {
+            return true;
+        }else if (id == R.id.menu_main_addItem){
+            adapter.add(new Customer("Added" , " Customer"));
+            // After data changes , U must notify list adapter
 //            adapter.notifyDataSetChanged();
-//            return true;
-//        }
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
