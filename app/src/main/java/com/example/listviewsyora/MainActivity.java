@@ -5,20 +5,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayAdapter<Customer> adapter;
-    private ArrayList<Customer> customers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,24 +33,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        customers = new ArrayList<>();
-        customers.add(new Customer("Customer 1" , "LastName 1"));
-        customers.add(new Customer("Customer 2" , "LastName 2"));
-        customers.add(new Customer("Customer 3" , "LastName 3"));
+        ArrayList<HashMap<String,String>> data = new ArrayList<>();
+        data.add(new Customer("Customer 1","LastName 1").toHashMap());
+        data.add(new Customer("Customer 2","LastName 2").toHashMap());
+        data.add(new Customer("Customer 3","LastName 3").toHashMap());
 
+        String[] hashMapProperities = {"FirstName",                       "LastName"};
+        int[] textViewIds =           {R.id.list_item_customer_2_firstName,R.id.list_item_customer_2_lastName};
+
+        SimpleAdapter adapter = new SimpleAdapter(this,data,R.layout.list_item_customer_2,hashMapProperities,textViewIds);
 
         ListView listView = (ListView)findViewById(R.id.activity_main_listView);
-        adapter = new ArrayAdapter<>(this,R.layout.list_item_customer,R.id.list_item_customer_name,customers);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Customer customer = adapter.getItem(i);
-                Toast.makeText(MainActivity.this,customer.getFirstName(),Toast.LENGTH_SHORT).show();
-//                adapter.remove(customer);
-            }
-        });
     }
 
     @Override
@@ -71,14 +63,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if (id == R.id.menu_main_addItem){
-            customers.add(new Customer("Added" , " Customer"));
-            // After data changes , U must notify list adapter
-            adapter.notifyDataSetChanged();
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }else if (id == R.id.menu_main_addItem){
+//            customers.add(new Customer("Added" , " Customer"));
+//            // After data changes , U must notify list adapter
+//            adapter.notifyDataSetChanged();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

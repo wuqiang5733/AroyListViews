@@ -1,6 +1,8 @@
 package com.example.listviewsyora;
 
 
+import java.util.HashMap;
+
 public class Customer {
 
     private final String firstName;
@@ -22,5 +24,12 @@ public class Customer {
     @Override
     public String toString(){
         return firstName + "" + lastName;
+    }
+
+    public HashMap<String,String> toHashMap() {
+        HashMap<String,String> returnValue = new HashMap<>();
+        returnValue.put("FirstName",getFirstName());
+        returnValue.put("LastName",getLastName());
+        return returnValue;
     }
 }
